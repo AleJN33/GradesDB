@@ -269,3 +269,46 @@ FROM v_student_grades v
 GROUP BY v.person_id, v.first_name, v.last_name;
 
 
+-- Consulta 30: Notas ordenadas por valor (de menor a mayor)
+SELECT g.grade_id, g.student_id, g.grade_value, g.exam_call
+FROM grades g
+ORDER BY g.grade_value ASC;
+
+-- Consulta 31: Notas ordenadas por valor descendente
+SELECT g.grade_id, g.student_id, g.grade_value, g.exam_call
+FROM grades g
+ORDER BY g.grade_value DESC;
+
+-- Consulta 32: Las 5 mejores notas
+SELECT g.grade_id, g.student_id, g.grade_value, g.exam_call
+FROM grades g
+ORDER BY g.grade_value DESC
+LIMIT 5;
+
+-- Consulta 33: Notas aprobadas ordenadas por estudiante
+SELECT 
+    st.first_name,
+    st.last_name,
+    g.grade_value,
+    g.exam_call
+FROM grades g
+JOIN v_students st ON g.student_id = st.student_id
+WHERE g.grade_value >= 5
+ORDER BY st.last_name ASC, st.first_name ASC;
+
+-- Consulta 34: Paginación - Segunda página de 5 notas
+SELECT g.grade_id, g.student_id, g.grade_value
+FROM grades g
+ORDER BY g.grade_value DESC
+LIMIT 5 OFFSET 5;
+
+-- Consulta 35: Tercera página de 5 notas
+SELECT g.grade_id, g.student_id, g.grade_value
+FROM grades g
+ORDER BY g.grade_value DESC
+LIMIT 5 OFFSET 10;
+
+-- Consulta 36: Grupos ordenados por año académico descendente
+SELECT g.group_name, g.activity, g.academic_year
+FROM groups g
+ORDER BY g.academic_year DESC, g.group_name ASC;
