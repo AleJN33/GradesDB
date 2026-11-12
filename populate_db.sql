@@ -239,8 +239,22 @@ INSERT INTO teaching_loads (professor_id, group_id, credits) VALUES
 -- VALUES (11, 'T1', 'Teoría', 2024);
 
 
-INSERT INTO teaching_loads (professor_id, group_id, credits)
-VALUES (1, 1, 0);
+-- INSERT INTO teaching_loads (professor_id, group_id, credits)
+-- VALUES (1, 1, -2);
+
+
+-- INSERT INTO grades (student_id, group_id, grade_value, exam_call, with_honors)
+-- VALUES (1, 1, 8.5, 'Primera', 1);
+
+
+-- INSERT INTO grades (student_id, group_id, grade_value, exam_call, with_honors)
+-- VALUES (1, 1, 11.5, 'Primera', 1);
+
+
+INSERT INTO grades (student_id, group_id, grade_value, exam_call, with_honors)
+VALUES (1, 1, 9.5, 'Décima', 1);
+
+
 
 
 
