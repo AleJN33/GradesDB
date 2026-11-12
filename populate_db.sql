@@ -222,3 +222,8 @@ INSERT INTO teaching_loads (professor_id, group_id, credits) VALUES
 -- Se intenta crear estudiante con método inválido
 -- INSERT INTO students (student_id, access_method)
 -- VALUES (2000, 'Erasmus');
+
+
+INSERT INTO degrees (degree_name, duration_years)
+VALUES ('Grado en Pruebas', 2);
+
