@@ -17,6 +17,7 @@ DROP TABLE IF EXISTS subjects;
 DROP TABLE IF EXISTS GROUPS;
 DROP TABLE IF EXISTS students_groups; 
 DROP TABLE IF EXISTS grades;
+DROP TABLE IF EXISTS students_subjects;
 SET FOREIGN_KEY_CHECKS = 1;
 
 CREATE TABLE people (
@@ -100,4 +101,15 @@ CREATE TABLE grades (
     PRIMARY KEY (grade_id),
     FOREIGN KEY (student_id) REFERENCES students(student_id),
     FOREIGN KEY (group_id) REFERENCES groups(group_id)
+);
+
+
+CREATE TABLE students_subjects (
+    student_subject_id INT AUTO_INCREMENT,
+    student_id INT NOT NULL,
+    subject_id INT NOT NULL,
+    PRIMARY KEY (student_subject_id),
+    CONSTRAINT uq_students_subjects UNIQUE (student_id, subject_id),
+    FOREIGN KEY (student_id) REFERENCES students(student_id),
+    FOREIGN KEY (subject_id) REFERENCES subjects(subject_id)
 );
