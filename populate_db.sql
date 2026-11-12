@@ -1,3 +1,9 @@
+--
+-- Autor: [Alejandro]
+-- Fecha: [Noviembre 2026]
+-- Descripción: [Creación del esquema de la base de datos grades_db]
+--
+
 USE grades_db;
 
  -- Primero se eliminan todos los datos de la tabla en el caso de que los hubiese y después se insertan los datos iniciales.
@@ -48,9 +54,7 @@ INSERT INTO professors (professor_id, category) VALUES
     (3, 'AyudanteDoctor'),
     (4, 'Titular'),
     (5, 'Ayudante');
-    
-    
--- Hay que hacer primero el DELETE de los datos.
+
 
 INSERT INTO students (student_id, access_method) VALUES
     (6, 'Selectividad'),
@@ -73,7 +77,6 @@ INSERT INTO students (student_id, access_method) VALUES
     (23, 'Selectividad'),
     (24, 'Selectividad'),
     (25, 'Selectividad');
-
 
 
 INSERT INTO degrees (degree_id, degree_name, duration_years) VALUES
@@ -111,8 +114,7 @@ INSERT INTO subjects (
     (16, 3, 'Sistemas Operativos', 'SO', 6, 2, 'Obligatoria'),
     (17, 3, 'Inteligencia Artificial', 'IA', 6, 2, 'Obligatoria');
     
-    
-    
+        
 -- IISSI-1 de TI tiene un grupo de teoría y dos grupos de laboratorio
 INSERT INTO groups (group_id, subject_id, group_name, activity, academic_year) VALUES
         (1, 11, 'T1', 'Teoría', 2024),
@@ -190,3 +192,16 @@ INSERT INTO teaching_loads (professor_id, group_id, credits) VALUES
 	(3, 2, 3.0),
 	(5, 3, 1.5),
 	(4, 3, 1.5);
+	
+-- Pruebas restricciones DNI
+-- INSERT INTO people (dni, first_name, last_name, age, email)
+-- VALUES ('99999999Z', 'Juan', 'Test', 15, 'juan@test.es');
+
+
+-- INSERT INTO people (dni, first_name, last_name, age, email)
+-- VALUES ('88888888A', 'Ana', 'Test', 25, 'ana@test.es');
+
+
+-- INSERT INTO people (dni, first_name, last_name, age, email)
+-- VALUES ('88888888A', 'Pedro', 'Test', 30, 'pedro@test.es');
+

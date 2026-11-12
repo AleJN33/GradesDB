@@ -1,7 +1,7 @@
 --
--- Autor: [Nombre]
--- Fecha: [mes y año]
--- Descripción: [qué hace el script]
+-- Autor: [Alejandro]
+-- Fecha: [Noviembre 2026]
+-- Descripción: [Creación del esquema de la base de datos grades_db]
 --
 
 DROP DATABASE IF EXISTS grades_db;
@@ -14,7 +14,7 @@ DROP TABLE IF EXISTS professors;
 DROP TABLE IF EXISTS students;
 DROP TABLE IF EXISTS degrees;
 DROP TABLE IF EXISTS subjects;
-DROP TABLE IF EXISTS GROUPS;
+DROP TABLE IF EXISTS groups;
 DROP TABLE IF EXISTS students_groups; 
 DROP TABLE IF EXISTS grades;
 DROP TABLE IF EXISTS students_subjects;
@@ -30,7 +30,7 @@ CREATE TABLE people (
     email VARCHAR(255) NOT NULL,
     PRIMARY KEY (person_id)
 );
--- Definición tabla professors
+
 
 CREATE TABLE professors (
     professor_id INT,
@@ -39,8 +39,6 @@ CREATE TABLE professors (
     FOREIGN KEY (professor_id) REFERENCES people(person_id)
 );
 
--- definición de people
--- definición de professors
 
 CREATE TABLE students (
     student_id INT,
@@ -80,6 +78,7 @@ CREATE TABLE groups (
     PRIMARY KEY (group_id),
     FOREIGN KEY (subject_id) REFERENCES subjects(subject_id)
 );
+
 
 CREATE TABLE students_groups (
     student_group_id INT AUTO_INCREMENT,
@@ -126,3 +125,17 @@ CREATE TABLE teaching_loads (
     FOREIGN KEY (professor_id) REFERENCES professors(professor_id),
     FOREIGN KEY (group_id) REFERENCES groups(group_id)
 );
+
+
+ALTER TABLE people
+    ADD CONSTRAINT ck_people_rn12_age CHECK (age BETWEEN 16 AND 70),
+    ADD CONSTRAINT ck_people_rn14_dni CHECK (dni REGEXP '^[0-9]{8}[A-Za-z]$'),
+    ADD CONSTRAINT uq_people_dni UNIQUE (dni),
+    ADD CONSTRAINT uq_people_email UNIQUE (email);
+
+
+-- Categorías de profesor permitidas
+ALTER TABLE professors
+    ADD CONSTRAINT ck_professors_category CHECK (
+        category IN ('Ayudante','AyudanteDoctor','Titular','Catedrático')
+    );
