@@ -130,3 +130,17 @@ FROM people p
 WHERE p.age BETWEEN 20 AND 30;
 
 
+-- Consulta 17: Nombres de grupos diferentes
+SELECT DISTINCT g.group_name 
+FROM groups g;
+
+
+-- Consulta 18: Tipos de asignatura diferentes
+SELECT DISTINCT s.subject_type
+FROM subjects s;
+
+
+-- Consulta 19: Años académicos registrados
+SELECT DISTINCT g.academic_year
+FROM groups g
+ORDER BY g.academic_year DESC;
