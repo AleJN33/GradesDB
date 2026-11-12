@@ -164,3 +164,19 @@ WHERE ge.group_id IN (
 SELECT s.subject_name, s.credits
 FROM subjects s
 WHERE s.credits > (SELECT AVG(credits) FROM subjects);
+
+
+-- Consulta 23: Personas con DNI terminado en 'A'
+SELECT p.first_name, p.last_name, p.dni
+FROM people p
+WHERE p.dni LIKE '%A';
+
+-- Consulta 24: Asignaturas cuyo nombre empieza por 'Fundamentos'
+SELECT s.subject_name
+FROM subjects s
+WHERE s.subject_name LIKE 'Fundamentos%';
+
+-- Consulta 25: Personas con nombres de 5 letras (usar 5 guiones bajos)
+SELECT p.first_name, p.last_name
+FROM people p
+WHERE p.first_name LIKE '_____';
