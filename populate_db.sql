@@ -1,12 +1,11 @@
 --
--- Autor: [Alejandro]
--- Fecha: [Noviembre 2026]
--- Descripción: [Creación del esquema de la base de datos grades_db]
+-- Autor: Alejandro
+-- Fecha: Noviembre 2026
+-- Descripción: Creación del esquema de la base de datos grades_db
 --
 
 USE grades_db;
 
- -- Primero se eliminan todos los datos de la tabla en el caso de que los hubiese y después se insertan los datos iniciales.
 SET FOREIGN_KEY_CHECKS = 0;
 DELETE FROM people;
 DELETE FROM professors;
@@ -85,15 +84,7 @@ INSERT INTO degrees (degree_id, degree_name, duration_years) VALUES
         (3, 'Tecnologías Informáticas', 4);
         
         
-INSERT INTO subjects (
-    subject_id,
-    degree_id,
-    subject_name,
-    acronym,
-    credits,
-    course,
-    subject_type
-) VALUES
+INSERT INTO subjects (subject_id, degree_id, subject_name, acronym, credits, course, subject_type) VALUES
     -- Primer curso (Tecnologías Informáticas)
     (1, 3, 'Fundamentos de Programación', 'FP', 12, 1, 'Formación Básica'),
     (2, 3, 'Cálculo Infinitesimal y Numérico', 'CIN', 6, 1, 'Formación Básica'),
@@ -251,10 +242,47 @@ INSERT INTO teaching_loads (professor_id, group_id, credits) VALUES
 -- VALUES (1, 1, 11.5, 'Primera', 1);
 
 
-INSERT INTO grades (student_id, group_id, grade_value, exam_call, with_honors)
-VALUES (1, 1, 9.5, 'Décima', 1);
+-- INSERT INTO grades (student_id, group_id, grade_value, exam_call, with_honors)
+-- VALUES (1, 1, 9.5, 'Décima', 1);
 
 
+-- UPDATE people
+-- SET email = 'nuevo.email@us.es'
+-- WHERE person_id = 12;
+
+
+-- UPDATE degrees
+-- SET duration_years = duration_years - 1;
+
+ 
+-- UPDATE professors
+-- SET category = 'Catedrático'
+-- WHERE category = 'Maestro';
+
+ 
+-- UPDATE grades
+-- SET grade_value = grade_value - 1
+-- WHERE student_id = 3;
+
+
+-- DELETE FROM people
+-- WHERE person_id = 100;
+
+ 
+-- DELETE FROM grades
+-- WHERE grade_value < 5;
+
+
+-- DELETE FROM DEGREES
+-- WHERE degree_id = 1;
+
+
+-- No funciona porque es una clave ajena
+-- DELETE FROM groups
+-- WHERE activity = 'Teoría';
+
+-- No se puede borrar porque tiene asignaturas. Primero habría que borrar las asignaturas
+-- DELETE FROM degrees WHERE degree_id = 3;
 
 
 

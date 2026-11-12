@@ -1,7 +1,7 @@
 --
--- Autor: [Alejandro]
--- Fecha: [Noviembre 2026]
--- Descripción: [Creación del esquema de la base de datos grades_db]
+-- Autor: Alejandro
+-- Fecha: Noviembre 2026
+-- Descripción: Creación del esquema de la base de datos grades_db
 --
 
 DROP DATABASE IF EXISTS grades_db;
@@ -76,7 +76,8 @@ CREATE TABLE groups (
     activity VARCHAR(15) NOT NULL,
     academic_year YEAR NOT NULL,
     PRIMARY KEY (group_id),
-    FOREIGN KEY (subject_id) REFERENCES subjects(subject_id)
+    FOREIGN KEY (subject_id) REFERENCES subjects(subject_id) ON DELETE CASCADE
+    
 );
 
 
@@ -181,3 +182,4 @@ ALTER TABLE grades
     ADD CONSTRAINT ck_grades_exam_call CHECK (
         exam_call IN ('Primera','Segunda','Tercera','Extraordinaria')
     );
+    
