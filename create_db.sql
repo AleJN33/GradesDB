@@ -139,3 +139,10 @@ ALTER TABLE professors
     ADD CONSTRAINT ck_professors_category CHECK (
         category IN ('Ayudante','AyudanteDoctor','Titular','Catedrático')
     );
+    
+    
+    -- Vías de acceso permitidas
+ALTER TABLE students
+    ADD CONSTRAINT ck_students_access_method CHECK (
+        access_method IN ('Selectividad','Ciclo','Mayor','Titulado','Extranjero')
+    );
