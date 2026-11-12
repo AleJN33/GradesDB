@@ -8,7 +8,10 @@ DROP DATABASE IF EXISTS grades_db;
 CREATE DATABASE grades_db;
 USE grades_db;
 
+SET FOREIGN_KEY_CHECKS = 0;
 DROP TABLE IF EXISTS people;
+DROP TABLE IF EXISTS professors;
+SET FOREIGN_KEY_CHECKS = 1;
 
 CREATE TABLE people (
     person_id INT AUTO_INCREMENT,
@@ -19,12 +22,6 @@ CREATE TABLE people (
     email VARCHAR(255) NOT NULL,
     PRIMARY KEY (person_id)
 );
-
-SET FOREIGN_KEY_CHECKS = 0;
-DROP TABLE IF EXISTS people;
-DROP TABLE IF EXISTS professors;
-SET FOREIGN_KEY_CHECKS = 1;
-
 -- Definición tabla professors
 
 CREATE TABLE professors (
@@ -33,4 +30,5 @@ CREATE TABLE professors (
     PRIMARY KEY (professor_id),
     FOREIGN KEY (professor_id) REFERENCES people(person_id)
 );
+
 
