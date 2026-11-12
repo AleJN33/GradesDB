@@ -134,14 +134,12 @@ ALTER TABLE people
     ADD CONSTRAINT uq_people_email UNIQUE (email);
 
 
--- Categorías de profesor permitidas
 ALTER TABLE professors
     ADD CONSTRAINT ck_professors_category CHECK (
         category IN ('Ayudante','AyudanteDoctor','Titular','Catedrático')
     );
     
     
-    -- Vías de acceso permitidas
 ALTER TABLE students
     ADD CONSTRAINT ck_students_access_method CHECK (
         access_method IN ('Selectividad','Ciclo','Mayor','Titulado','Extranjero')
@@ -169,3 +167,7 @@ ALTER TABLE groups
         activity IN ('Teoría','Laboratorio')
     ),
     ADD CONSTRAINT uq_groups_name UNIQUE (subject_id, group_name, academic_year);
+
+
+ALTER TABLE teaching_loads
+    ADD CONSTRAINT ck_teaching_loads_credits CHECK (credits > 0);

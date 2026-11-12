@@ -239,4 +239,9 @@ INSERT INTO teaching_loads (professor_id, group_id, credits) VALUES
 -- VALUES (11, 'T1', 'Teoría', 2024);
 
 
+INSERT INTO teaching_loads (professor_id, group_id, credits)
+VALUES (1, 1, 0);
+
+
+
 
