@@ -72,6 +72,35 @@ SELECT
 FROM students st
 JOIN people p ON st.student_id = p.person_id;
 
-SELECT p.first_name
-FROM v_students p
-WHERE p.access_method = 'Selectividad';
+
+-- Consulta 7: Media de las notas del grupo con ID 1
+SELECT AVG(g.grade_value) AS average_grade
+FROM grades g
+WHERE g.group_id = 1;
+
+
+-- Consulta 8: Total de créditos de las asignaturas del grado con ID 3
+SELECT SUM(s.credits) AS total_credits
+FROM subjects s 
+WHERE s.degree_id = 3;
+
+
+-- Consulta 9: Número total de estudiantes
+SELECT COUNT(*) AS total_students
+FROM students;
+
+
+-- Consulta 10: Número de grupos por tipo de actividad
+SELECT activity, COUNT(*) AS total_groups
+FROM groups
+GROUP BY activity;
+
+
+-- Consulta 11: Máxima nota obtenida
+SELECT MAX(g.grade_value) AS max_grade
+FROM grades g;
+
+
+-- Consulta 12: Mínima nota obtenida
+SELECT MIN(g.grade_value) AS min_grade
+FROM grades g;
