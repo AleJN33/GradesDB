@@ -574,3 +574,99 @@ WHERE d.degree_id IN (
     GROUP BY degree_id
     HAVING COUNT(*) > 15
 );
+
+
+-- Consulta 61: Estudiantes que nunca han suspendido (todas sus notas ≥ 5)
+SELECT st.student_id, st.first_name, st.last_name, MIN(g.grade_value) as min_grade
+FROM v_students st
+JOIN grades g ON st.student_id = g.student_id 
+GROUP BY st.student_id, st.first_name, st.last_name
+HAVING MIN(g.grade_value) >= 5;
+
+
+-- Consulta 62: Profesores que solo imparten teoría (no laboratorios)
+SELECT DISTINCT pr.professor_id, pr.first_name, pr.last_name, pr.category
+FROM v_professors pr
+JOIN teaching_loads tl ON pr.professor_id = tl.professor_id
+WHERE pr.professor_id NOT IN (
+	SELECT tl2.professor_id
+	FROM teaching_loads tl2
+	JOIN groups gr ON tl2.group_id = gr.group_id
+	WHERE gr.activity = 'Laboratorio'
+);
+
+
+-- Consulta 63: Asignaturas sin grupos creados (usar LEFT JOIN)
+SELECT s.subject_id, s.subject_name, s.acronym, s.credits, s.course, s.subject_type
+FROM subjects s
+LEFT JOIN groups gr ON s.subject_id = gr.subject_id
+WHERE gr.group_id IS NULL;
+
+
+-- Consulta 64: Nota media de cada grado en el año 2024
+SELECT d.degree_id, d.degree_name, AVG(g.grade_value) AS average_grade, COUNT(*) AS total_grades
+FROM degrees d
+JOIN subjects s ON d.degree_id = s.degree_id
+JOIN groups gr ON s.subject_id = gr.subject_id
+JOIN grades g ON gr.group_id = g.group_id
+WHERE gr.academic_year = 2024
+GROUP BY d.degree_id, d.degree_name;
+
+
+-- Consulta 65: Estudiantes con la mejor nota de cada asignatura
+SELECT DISTINCT v1.subject_name, v1.acronym, v1.first_name, v1.last_name, v1.grade_value AS max_grade
+FROM v_student_grades v1
+WHERE v1.grade_value = (
+	SELECT MAX(v2.grade_value)
+	FROM v_student_grades v2
+	WHERE v2.acronym = v1.acronym
+)
+ORDER BY v1.subject_name ASC;
+
+
+-- Consulta 66: Grupos ordenados por número de estudiantes matriculados
+SELECT gr.group_id, s.acronym, gr.group_name, gr.activity, gr.academic_year, COUNT(ge.student_id) AS total_students
+FROM groups gr
+JOIN subjects s ON gr.subject_id = s.subject_id
+LEFT JOIN students_groups ge ON gr.group_id = ge.group_id
+GROUP BY gr.group_id, s.acronym, gr.group_name, gr.activity, gr.academic_year
+ORDER BY total_students DESC, gr.group_id ASC;
+
+
+-- Consulta 67:Profesores con carga docente superior a 15 créditos
+SELECT pr.professor_id, pr.first_name, pr.last_name, pr.category, SUM(tl.credits) AS total_credits
+FROM v_professors pr
+JOIN teaching_loads tl ON pr.professor_id = tl.professor_id
+GROUP BY pr.professor_id, pr.first_name, pr.last_name, pr.category
+HAVING SUM(tl.credits) > 15;
+
+
+-- Consulta 68: Año académico con más matrículas de honor
+SELECT gr.academic_year, COUNT(*) AS total_honors
+FROM grades g
+JOIN groups gr ON g.group_id = gr.group_id
+WHERE g.with_honors = 1
+GROUP BY gr.academic_year
+ORDER BY total_honors DESC
+LIMIT 1;
+
+-- Consulta 69: Asignaturas con mayor dispersión de notas (usando STD o VARIANCE)
+SELECT s.subject_id, s.subject_name, s.acronym, ROUND(AVG(g.grade_value), 2) AS average_grade, ROUND(STD(g.grade_value), 2) AS std_deviation, ROUND(VARIANCE(g.grade_value), 2) AS variance_grade
+FROM subjects s
+JOIN groups gr ON s.subject_id = gr.subjects_id
+JOIN grades g ON gr.group_id = g.group_id
+GROUP BY s.subject_id, s.subject_name, s.acronym
+ORDER BY std_deviation DESC;
+
+-- Consulta 70: Estudiantes matriculados en todas las asignaturas de primer curso
+SELECT st.student_id, st.first_name, st.last_name, COUNT(DISTINCT ss.subject_id) AS first_year_subjects
+FROM v_students st
+JOIN students_subjects ss ON st.student_id = ss.student_id
+JOIN subjects s ON ss.subject_id = s.subject_id
+WHERE s.course = 1
+GROUP BY st.student_id, st.first_name, st.last_name
+HAVING COUNT(DISTINCT ss.subject_id) = (
+    SELECT COUNT(*)
+    FROM subjects
+    WHERE course = 1
+);
