@@ -1,7 +1,7 @@
 --
 -- Autor: Alejandro
 -- Fecha: Noviembre 2026
--- Descripción: Creación del esquema de la base de datos grades_db
+-- Descripción: Creación de las consultas de grades_db
 --
 
 USE grades_db;
@@ -653,7 +653,7 @@ LIMIT 1;
 -- Consulta 69: Asignaturas con mayor dispersión de notas (usando STD o VARIANCE)
 SELECT s.subject_id, s.subject_name, s.acronym, ROUND(AVG(g.grade_value), 2) AS average_grade, ROUND(STD(g.grade_value), 2) AS std_deviation, ROUND(VARIANCE(g.grade_value), 2) AS variance_grade
 FROM subjects s
-JOIN groups gr ON s.subject_id = gr.subjects_id
+JOIN groups gr ON s.subject_id = gr.subject_id
 JOIN grades g ON gr.group_id = g.group_id
 GROUP BY s.subject_id, s.subject_name, s.acronym
 ORDER BY std_deviation DESC;

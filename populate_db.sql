@@ -1,7 +1,7 @@
 --
 -- Autor: Alejandro
 -- Fecha: Noviembre 2026
--- Descripción: Creación del esquema de la base de datos grades_db
+-- Descripción: Almacén de dates para grades_db
 --
 
 USE grades_db;
