@@ -190,3 +190,60 @@ BEGIN
         END IF;
     END IF;
 END//
+
+
+
+-- TRIGGERS EJERCICIOS PROPUESTOS LAB 5
+-- Ejercicio 3: Validar que un grado no pueda tener más de 240 créditos en total sumando todas sus asignaturas.
+CREATE OR REPLACE TRIGGER t_biu_subjects_max_credits
+BEFORE INSERT OR UPDATE ON subjects
+FOR EACH ROW
+BEGIN
+	 DECLARE v_current_credits INT DEFAULT 0;
+	 
+    SELECT COALESCE(SUM(credits), 0) INTO v_current_credits
+    FROM subjects
+    WHERE degree_id = NEW.degree_id
+    	AND subject_id <> NEW.subject_id;
+    	
+    IF (v_current_credits + NEW.credits) > 240 THEN
+    	SIGNAL SQLSTATE '45000'
+   		SET MESSAGE_TEXT = 'Un grado no puede tener más de 240 créditos en total sumando todas sus asignaturas';
+    END IF;
+END //
+
+
+
+-- Ejercicio 4:Validar que un estudiante no pueda estar matriculado en más de 60 créditos por año académico.
+CREATE OR REPLACE TRIGGER t_biu_students_groups_max_credits
+BEFORE INSERT OR UPDATE ON students_groups
+FOR EACH ROW
+BEGIN
+	DECLARE v_subject_id INT;
+	DECLARE v_academic_year INT;
+	DECLARE v_new_credits INT;
+	DECLARE v_current_credits INT DEFAULT 0;
+	
+	SELECT g.subject_id, g.academic_year, s.credits INTO v_subject_id, v_academic_year, v_new_credits
+	FROM groups g
+	JOIN subjects s ON s.subject_id = g.subject_id
+	WHERE g.group_id = NEW.group_id;
+	
+	SELECT COALESCE(SUM(t.credits), 0) INTO v_current_credits
+	FROM (
+		SELECT DISTINCT g.subject_id, s.credits
+		FROM students_groups sg
+		JOIN groups g ON g.group_id = sg.group_id
+		JOIN subjects s ON s.subject_id = g.subject_id
+		WHERE sg.student_id = NEW.student_id
+			AND g.academic_year = v_academic_year
+			AND g.subject_id <> v_subject_id
+			AND sg.student_group_id <> NEW.student_group_id
+	) t;
+	
+	IF (v_current_credits + v_new_credits) > 60 THEN
+		SIGNAL SQLSTATE '45000'
+			SET MESSAGE_TEXT = 'Un estudiante no puede estar matriculado en más de 60 créditos por año académico';
+	END IF;
+END //
+

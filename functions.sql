@@ -105,3 +105,41 @@ BEGIN
     -- RN04: como máximo un grupo de cada actividad (teoría o laboratorio)
     RETURN v_count >= 1;
 END//
+
+
+
+
+-- FUNCIONES PROPUESTAS LAB 5
+-- Función: Cuenta cuántas notas tiene un estudiante en una convocatoria específica.
+CREATE OR REPLACE FUNCTION f_count_student_grades(
+	p_student_id INT, 
+	p_exam_call VARCHAR(20)
+)
+RETURNS INT
+DETERMINISTIC
+READS SQL DATA
+BEGIN
+	DECLARE v_count INT;
+	SELECT COUNT(*) INTO v_count
+	FROM grades
+	WHERE student_id = p_student_id
+		AND exam_call = p_exam_call;
+	RETURN v_count;
+END //	
+	
+	
+	
+-- Función: Calcula el total de créditos que imparte un profesor.
+CREATE OR REPLACE FUNCTION f_professor_total_credits(
+	p_professor_id INT
+)
+RETURNS DECIMAL(4,1)
+DETERMINISTIC
+READS SQL DATA
+BEGIN
+	DECLARE v_total_credits DECIMAL(4,1) DEFAULT 0;
+	SELECT COALESCE(SUM(credits), 0) INTO v_total_credits
+	FROM teaching_loads
+	WHERE professor_id = p_professor_id;
+	RETURN v_total_credits;
+END //

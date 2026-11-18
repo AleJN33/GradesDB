@@ -714,3 +714,92 @@ SELECT s.subject_id, s.subject_name, s.acronym
 FROM subjects s
 WHERE f_subject_group_limit_reached(s.subject_id, 'Teoría', 2025) = TRUE;
 
+
+
+-- TESTS PARA EJECUTAR LOS EJERCICIOS PROPUESTO DEL LAB 5
+-- Ejercicio 1
+-- Caso 1: Un alumno con varias notas en la misma convocatoria
+SELECT f_count_student_grades(6, 'Primera') AS notas_alumno_6_primera;
+
+-- Caso 2: Un alumno con 1 nota en Segunda convocatoria
+SELECT f_count_student_grades(16, 'Segunda') AS notas_alumno_16_segunda;
+
+-- Caso 3: Un alumno sin notas en esa convocatoria
+SELECT f_count_student_grades(6, 'Extraordinaria') AS notas_alumno_6_extra;
+
+
+-- Ejercicio 2
+-- Caso 1: Profesor 1
+SELECT f_professor_total_credits(1) AS creditos_profesor_1;
+
+-- Caso 2: Profesor 5
+SELECT f_professor_total_credits(5) AS creditos_profesor_5;
+
+-- Caso 3: Todos los profesores con su carga total calculada con la función
+SELECT pr.professor_id, pr.first_name, pr.last_name, f_professor_total_credits(pr.professor_id) AS total_credits
+FROM v_professors pr
+ORDER BY total_credits DESC;
+
+-- Caso 4: Un ID de profesor que no exista
+SELECT f_professor_total_credits(999) AS creditos_inexistente;
+
+
+
+-- Ejercicio 3:
+-- Vemos que el grado 3 tiene 132 créditos
+SELECT COALESCE(SUM(credits), 0) AS creditos_actuales
+FROM subjects
+WHERE degree_id = 3;
+
+-- Insertamos asignaturas de 12 créditos hasta quedarnos justo en 240
+INSERT INTO subjects (degree_id, subject_name, acronym, credits, course, subject_type) VALUES
+    (3, 'Prueba 240 - 1', 'P240_1', 12, 4, 'Optativa'),
+    (3, 'Prueba 240 - 2', 'P240_2', 12, 4, 'Optativa'),
+    (3, 'Prueba 240 - 3', 'P240_3', 12, 4, 'Optativa'),
+    (3, 'Prueba 240 - 4', 'P240_4', 12, 4, 'Optativa'),
+    (3, 'Prueba 240 - 5', 'P240_5', 12, 4, 'Optativa'),
+    (3, 'Prueba 240 - 6', 'P240_6', 12, 4, 'Optativa'),
+    (3, 'Prueba 240 - 7', 'P240_7', 12, 4, 'Optativa'),
+    (3, 'Prueba 240 - 8', 'P240_8', 12, 4, 'Optativa'),
+    (3, 'Prueba 240 - 9', 'P240_9', 12, 4, 'Optativa');
+
+-- Intentamos meter otros 6 créditos
+INSERT INTO subjects (degree_id, subject_name, acronym, credits, course, subject_type) VALUES
+    (3, 'Prueba 240 - 10', 'P240_10', 6, 4, 'Optativa');
+
+-- Probamos con UPDATE
+UPDATE subjects SET credits = 12 WHERE subject_id = 4;
+
+-- Limpiamos los cambios
+DELETE FROM subjects WHERE acronym LIKE 'P240_%';
+
+
+
+-- Ejercicio 4
+-- Vemos cuántos créditos tiene ahora mismo el alumno 6 en 2024
+SELECT SUM(t.credits) AS creditos_2024
+FROM (
+    SELECT DISTINCT g.subject_id, s.credits
+    FROM students_groups sg
+    JOIN groups g ON g.group_id = sg.group_id
+    JOIN subjects s ON s.subject_id = g.subject_id
+    WHERE sg.student_id = 6 AND g.academic_year = 2024
+) t;
+
+-- Matriculamos al alumno 6 en 4 asignaturas más de 6 créditos para llegar a 60
+INSERT INTO students_subjects (student_id, subject_id) VALUES (6, 3), (6, 4), (6, 5), (6, 6), (6, 7);
+INSERT INTO groups (group_id, subject_id, group_name, activity, academic_year) VALUES
+    (101, 3, 'T1', 'Teoría', 2024),
+    (102, 4, 'T1', 'Teoría', 2024),
+    (103, 5, 'T1', 'Teoría', 2024),
+    (104, 6, 'T1', 'Teoría', 2024),
+    (105, 7, 'T1', 'Teoría', 2024);
+INSERT INTO students_groups (student_id, group_id) VALUES (6, 101), (6, 102), (6, 103), (6, 104);
+
+-- Intentamos matricularlo en la 5ª. DEBE FALLAR
+INSERT INTO students_groups (student_id, group_id) VALUES (6, 105);
+
+-- Limpiamos los cambios
+DELETE FROM students_groups WHERE group_id >= 101;
+DELETE FROM groups WHERE group_id >= 101;
+DELETE FROM students_subjects WHERE student_id = 6 AND subject_id IN (3, 4, 5, 6, 7);
